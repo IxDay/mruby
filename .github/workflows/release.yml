@@ -10,7 +10,6 @@ permissions: read-all
 jobs:
   source:
     name: Source Code Releasing
-    if: ${{ github.repository == 'mruby/mruby' }}
     permissions:
       contents: write
     runs-on: ubuntu-22.04
