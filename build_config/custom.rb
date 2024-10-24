@@ -20,7 +20,7 @@ MRuby::Build.new do |conf|
 
   conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
   # conf.gem '../mrake'
-  conf.get :github => 'ixday/mrake'
+  conf.gem :github => 'ixday/mrake'
   conf.gem :github => 'mattn/mruby-json'
   conf.gem :github => 'mrbgems/mruby-yaml'
   conf.gem :github => 'ixday/mruby-polarssl'

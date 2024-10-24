@@ -8,38 +8,49 @@ on:
 permissions: read-all
 
 jobs:
-  source:
-    name: Source Code Releasing
+  Release:
+    name: "${{ matrix.os }}"
     permissions:
       contents: write
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
+      max-parallel: 8
+      # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
+      matrix:
+        include:
+          - {os: ubuntu-24.04, name: linux_x86_64}
+          - {os: macos-latest, name: darwin_arm64}
+          - {os: macos-13, name: darwin_x86_64}
+    env:
+      MRUBY_CONFIG: custom
+      CC: clang
+      CXX: clang++
+      LD: clang
     steps:
       - name: "Checkout ${{ github.ref_name }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
+      - name: Brew install automake
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        run: brew install automake
+      - name: Brew install libtool
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install libtool
       - name: Builds
-        id: builds
+        run: rake
+      - name: Rename
         run: |
-          tagname="$GITHUB_REF_NAME"
-          packagename="mruby-$tagname"
-          destdir=packages
-
-          mkdir -p "$destdir"
-          git archive --format zip --prefix "$packagename/" -o "$destdir/$packagename.zip" "$GITHUB_REF"
-          git archive --format tar.gz --prefix "$packagename/" -o "$destdir/$packagename.tar.gz" "$GITHUB_REF"
-          gunzip -c "$destdir/$packagename.tar.gz" | xz > "$destdir/$packagename.tar.xz"
-
-          (
-            cd "$destdir" || exit
-            sha256sum -- * > .sha256
-            mv .sha256 "$packagename.sha256"
-          )
+          cp build/host/bin/mruby mruby-${{matrix.name}}
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           # draft: true
           prerelease: ${{ contains(github.ref_name, '-rc') }}
-          body_path: NEWS
-          files: packages/*
+          # body_path: NEWS
+          files: mruby-${{matrix.name}}
+      - name: Release mrake
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/host/bin/mrake
