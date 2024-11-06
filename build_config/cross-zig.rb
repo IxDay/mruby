@@ -1,3 +1,7 @@
+def ext(target)
+  target.match(/cygwin|mswin|mingw|bccwin|wince|emx/i) ? ".exe" : ""
+end
+
 class MRuby::Toolchain::Zig
   ARCHITECTURES = {
     "i386-windows"      => "i686-w64-mingw32",
@@ -15,36 +19,40 @@ class MRuby::Toolchain::Zig
     @arch = ARCHITECTURES[@target]
   end
 
-  def exec_ext = (@target.end_with?("-windows") ? ".exe" : "" )
+  def exec_ext = ext(@arch)
 
   def cc = "zig cc -target #{@target}"
+  def cxx = "zig c++ -target #{@target}"
 
   def ar = "zig ar"
 end
 
 MRuby::Toolchain.new(:zig) do |conf, target|
   zig = MRuby::Toolchain::Zig.new(target)
-
-  toolchain :gcc, default_command: zig.cc
+  ext = ext(RUBY_PLATFORM)
 
   mrbc = MRuby::Build.new('host') do |conf|
-    conf.toolchain :gcc, default_command: zig.cc
+    conf.toolchain :gcc, default_command: "zig cc"
     conf.build_mrbc_exec
     conf.disable_libmruby
     conf.disable_presym
     conf.archiver.command = zig.ar
-    conf.exts.executable = zig.exec_ext
+    conf.exts.executable = ext
   end
+
+  ENV['CC'] = zig.cc
+  ENV['CXX'] = zig.cxx
+  toolchain :gcc
 
   if conf.kind_of?(MRuby::CrossBuild)
     conf.host_target = zig.arch
   end
-  conf.mrbcfile = File.join(mrbc.class.install_dir, "mrbc" + zig.exec_ext)
+  conf.mrbcfile = File.join(mrbc.class.install_dir, "mrbc" + ext)
   conf.archiver.command = zig.ar
   conf.exts.executable = zig.exec_ext
 end
 
-%w[x86_64-linux x86_64-linux-musl].each do |arch|
+%w[x86_64-windows].each do |arch|
   MRuby::CrossBuild.new(arch) do |conf|
     conf.toolchain :zig, arch
 
@@ -57,11 +65,11 @@ end
     # Generate mruby command
     conf.gem :core => "mruby-bin-mruby"
 
-    conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
+    # conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
     # conf.gem '../mrake'
     # conf.gem :github => 'ixday/mrake'
-    conf.gem :github => 'mattn/mruby-json'
-    # conf.gem :github => 'mrbgems/mruby-yaml'
+    # conf.gem :github => 'mattn/mruby-json'
+    # conf.gem '../mruby-yaml'
     # conf.gem :github => 'ixday/mruby-polarssl'
 
     conf.cc do |cc|
