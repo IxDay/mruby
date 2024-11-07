@@ -19,11 +19,22 @@ MRuby::Build.new do |conf|
   conf.gem :core => "mruby-bin-mruby"
 
   conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
-  # conf.gem '../mrake'
-  conf.gem :github => 'ixday/mrake'
+  conf.gem :github => 'buty4649/mruby-onig-regexp'
+  conf.gem :github => 'appPlant/mruby-process'
+  # conf.gem :core => 'mruby-dir'
+  # conf.gem :core => "mruby-io"
+  # conf.gem :mgem => "mruby-optparse"
+  # spec.add_dependency "mruby-process"
+  # conf.gem :mgem => "mruby-require"
+  # spec.add_dependency "mruby-file-stat"
+  # conf.gem :core => "mruby-array-ext"
+  # conf.gem :github => 'ixday/mrake'
+  conf.gem '../mruby-rake'
   conf.gem :github => 'mattn/mruby-json'
   conf.gem :github => 'mrbgems/mruby-yaml'
   conf.gem :github => 'ixday/mruby-polarssl'
+  #conf.gem :github => 'mattn/mruby-onig-regexp'
+  # conf.gem '../mruby-onig-regexp'
 
   # include HTTP
   # conf.gem :github => 'matsumotory/mruby-simplehttp'
