@@ -1,44 +1,49 @@
-# Custom MRuby for Scripting Adventures
+# MRuby distribution for everyday scripting
 
-Welcome to my custom MRuby build! After exploring various scripting options, I’ve crafted this tailored version of MRuby to meet a specific set of requirements for cross-platform, CLI-oriented scripting.
+This project aims to provide a fully-featured scripting platform for all operating systems in a single, small binary.
 
 ## Project Overview
 
-This project emerged from a quest to find the perfect scripting tool ([see blog post][blog_post]):
-cross-platform, with a rich set of CLI primitives, and lightweight. While many tools like Bash, Python, and Node.js came close, they all had drawbacks in terms of compatibility, size, or simplicity. MRuby proved to be the answer, offering:
+The idea emerged from a quest to find the perfect scripting tool for my Golang
+projects ([see blog post][blog_post]).
+I was dissatisfied with using Make and the heavy reliance on bash scripts (hello `coreutils` compat issues!)
+to handle all the essential tasks a software project requires. I ended up shipping the following requirements:
 
 1. **Cross-Platform Compatibility:** Ensuring the binary works consistently across different operating systems.
-2. **CLI Primitives:** Support for robust CLI output, option parsing, and flexibility to handle complex arguments.
-3. **Built-in HTTP and JSON/YAML Support:** Ability to make HTTP calls and parse JSON directly in scripts.
-4. **Lightweight and Fast:** All-in-one executable without extra setup, and quick to run even complex scripts.
+2. **CLI Primitives:** The binary is built with support for optparse, glob patterns, and Windows path compatibility.
+3. **Built-in HTTP/HTTPS and JSON/YAML Support:** Ability to make HTTP/HTTPS calls and parse JSON/YAML directly in scripts.
+5. **Small Self-Contained Binary:** All-in-one executable without extra setup, with no additional dependencies.
+6. **Support for Task Execution:** With the included [mrake][mrake] library, you can organize and manage complex task workflows, similar to Makefile dependencies.
 
-## Nice-to-Have Features
+## Getting started
 
-Beyond the essentials, the custom MRuby binary includes additional features that enhance the scripting experience:
+Download the mrake and mruby binaries from the [Releases page][releases] and place them in a folder within your $PATH.
+That’s it! You can now script using `#!/usr/bin/env mruby` or by creating a Rakefile.
+You can check out the [examples](./examples) folder for sample scripts that demonstrate MRuby’s capabilities.
 
-- **Small Self-Contained Binary:** A lightweight package to keep installations simple, with no extra dependencies.
-- **Support for Task Execution:** With the included [mrake][mrake] library, you can organize and manage complex task workflows, similar to Makefile dependencies.
-- **Dynamic Language Power:** MRuby brings the expressiveness of Ruby while remaining efficient and portable.
+## Forking
 
-## Installation and Getting Started
-
-To get started, simply download the appropriate binary for your operating system from the [Releases](#releases) section.
-
-After downloading:
-
-1. **Run the binary**: Just execute it from your terminal, no installation required.
-2. **Create your scripts**: Use MRuby’s flexible syntax and built-in modules to start scripting. Check out the [Examples](./examples) folder for sample scripts that demonstrate MRuby’s capabilities.
+If your project requires a different set of dependencies, feel free to fork this project.
+After forking, add or remove any dependencies in the [build configuration][build_config] file,
+then enable the [GitHub Action][github_action] to package your own release.
 
 ## Releases
 
-Find the latest binaries on the [Releases page][releases]. Each release includes pre-packaged versions for different platforms (Linux, MacOS, Windows **coming soon**) so you can get up and running with minimal setup.)
+Find the latest binaries on the [Releases page][releases]. Each release includes pre-packaged versions for different platforms (Linux, MacOS, Windows) so you can get up and running with minimal setup.)
+
+
+## License
+This project is released under the [MIT License][license], the same as the parent project, [mruby][mruby].
 
 ## Roadmap
 
-- Windows binary
 - Better integration of PolarSSL to handle certificate generation
 
 
 [mrake]: https://github.com/IxDay/mrake
+[mruby]: https://github.com/mruby/mruby
+[build_config]: ./build.rb
+[github_action]: ./.github/workflows/release.yml
 [releases]: https://github.com/IxDay/mruby/releases
 [blog_post]: https://platipy.notion.site/The-quest-for-the-optimal-scripting-language-b013b3e35a5c4c6c8d5b4a7a31cb1508
+[license]: ./LICENSE
