@@ -5,7 +5,11 @@ MRUBY_CONFIG=build.rb rake
 
 MRuby::Build.new do |conf|
   # load specific toolchain settings
-  conf.toolchain
+  if RUBY_PLATFORM =~ /linux/
+    conf.toolchain :zig
+  else
+    conf.toolchain
+  end
 
   # conf.gembox 'default'
   # https://github.com/mruby/mruby/blob/f245943aeddb9aa44062b19871831ba4af49e494/mrbgems/default.gembox#L4
