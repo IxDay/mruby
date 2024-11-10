@@ -1,0 +1,37 @@
+project = "hello"
+build_file = :"#{File.join %W[out #{project}]}"
+
+task default: [:build]
+
+desc "Run all unit tests"
+task :test => [:generate] do
+  sh "go test ./..."
+end
+
+directory "out"
+
+desc "Build the binary of the project"
+task build: [:generate, build_file]
+
+file build_file => Dir.glob("**/*.go") << "out" do |t|
+  sh "go build -ldflags '-s -w' -o #{t.name} #{Dir.glob("*.go").join(' ')}"
+end
+
+desc "Generate template files"
+task generate: ["_templ.go"]
+
+rule "_templ.go" => ".templ" do |t|
+  sh "templ generate -f #{t.prerequisites.first}"
+end
+
+desc "Clean up generated files"
+task :clean do
+  walk("out") do |entry|
+    puts "rm #{entry}"
+    File.directory?(entry) ? Dir.delete(entry) : File.delete(entry)
+  end
+  Dir.glob("**/*_templ.go") do |entry|
+    puts "rm #{entry}"
+    File.delete(entry)
+  end
+end
