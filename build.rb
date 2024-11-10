@@ -1,18 +1,14 @@
-=begin
-# https://github.com/mruby/mruby.git
-MRUBY_CONFIG=build.rb rake
-=end
+require_relative 'toolchain'
 
-MRuby::Build.new do |conf|
-  # load specific toolchain settings
-  if RUBY_PLATFORM =~ /linux/
-    conf.toolchain :zig
-  else
-    conf.toolchain
-  end
+ARCH_MAPPING = {
+  "windows-x86_64"    => "x86_64-windows-gnu",
+  "macos-x86_64"      => RUBY_PLATFORM,
+  # "macos-aarch64"     => RUBY_PLATFORM, # this is not working at the moment
+  "linux-x86_64"      => "x86_64-linux",
+  "linux-x86_64-musl" => "x86_64-linux-musl"
+}
 
-  # conf.gembox 'default'
-  # https://github.com/mruby/mruby/blob/f245943aeddb9aa44062b19871831ba4af49e494/mrbgems/default.gembox#L4
+def setup(conf)
   conf.gembox "stdlib"
   conf.gembox "stdlib-ext"
   conf.gembox "stdlib-io"
@@ -22,27 +18,36 @@ MRuby::Build.new do |conf|
   # Generate mruby command
   conf.gem :core => "mruby-bin-mruby"
 
+  # Those are forked gem to allow proper cross compilation,
+  # they are dependencies of the other gems listed below
+  conf.gem :github => 'ixday/mruby-onig-regexp'
+  conf.gem :github => 'appPlant/mruby-process'
+
   conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
-  # conf.gem '../mrake'
-  conf.gem :github => 'ixday/mrake'
   conf.gem :github => 'mattn/mruby-json'
   conf.gem :github => 'mrbgems/mruby-yaml'
   conf.gem :github => 'ixday/mruby-polarssl'
+  conf.gem :github => 'ixday/mrake'
 
-  # include HTTP
-  # conf.gem :github => 'matsumotory/mruby-simplehttp'
-
-  # C compiler settings
   conf.cc do |cc|
-  #  cc.command = ENV['CC'] || 'gcc'
+    # we want to optimize for size and speed
+    # https://stackoverflow.com/questions/72030595/which-gcc-optimization-flags-affect-binary-size-the-most#answer-72037241
     cc.flags << '-Os'
-  #  cc.include_paths = ["#{root}/include"]
-  #  cc.defines = %w()
-  #  cc.option_include_path = %q[-I"%s"]
-  #  cc.option_define = '-D%s'
-  #  cc.compile_options = %Q[%{flags} -MMD -o "%{outfile}" -c "%{infile}"]
   end
 
-  conf.enable_bintest
-  conf.enable_test
+  # generate a binary using the passed name to ease release creation
+  mruby = File.join build_dir, "bin", exefile("mruby")
+  product = File.join build_dir, "bin", exefile("mruby-#{name}")
+
+  file product => mruby do
+    FileUtils.cp(mruby, product)
+  end
+  products << product # this adds the target rake task to current build targets
+end
+
+def build(name)
+  MRuby::CrossBuild.new(name) do |conf|
+    conf.toolchain :zig, ARCH_MAPPING[name]
+    setup(conf)
+  end
 end

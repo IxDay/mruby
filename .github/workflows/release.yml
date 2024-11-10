@@ -9,55 +9,41 @@ permissions: read-all
 
 jobs:
   Release:
-    name: "${{ matrix.os }}"
-    permissions:
-      contents: write
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    name: "${{ matrix.name }}"
     strategy:
-      fail-fast: false
       max-parallel: 8
-      # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
+      fail-fast: false
       matrix:
         include:
-          - {os: ubuntu-24.04, name: linux_x86_64}
-          - {os: macos-latest, name: darwin_arm64}
-          - {os: macos-13, name: darwin_x86_64}
+          - {name: linux-x86_64,      os: macos-latest}
+          - {name: linux-x86_64-musl, os: macos-latest}
+          - {name: windows-x86_64,    os: macos-latest}
+          - {name: macos-aarch64,     os: macos-latest}
+          - {name: macos-x86_64,      os: macos-13}
+    permissions:
+      contents: write
+    runs-on: "${{ matrix.os }}"
     env:
-      MRUBY_CONFIG: config/build.rb
-      CC: clang
-      CXX: clang++
-      LD: clang
+      MRUBY_CONFIG: config/config-${{ matrix.name }}.rb
     steps:
-      - name: "Checkout ${{ github.ref_name }} ( ${{ github.sha }} ) MRuby"
-        uses: actions/checkout@v4
+      - run: brew install --force automake autoconf libtool mingw-w64 zig
+      - uses: actions/checkout@v4
+        name: "Checkout ${{ github.ref_name }} ( ${{ github.sha }} ) MRuby"
         with:
           repository: mruby/mruby
           path: mruby
-      - name: "Checkout ${{ github.ref_name }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        name: "Checkout ${{ github.ref_name }} ( ${{ github.sha }} )"
         with:
           path: config
-      - name: Brew install automake
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        run: brew install automake
-      - name: Brew install libtool
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install libtool
       - name: Builds
         run: rake -f mruby/Rakefile
-      - name: Rename
-        run: |
-          cp mruby/build/host/bin/mruby mruby-${{matrix.name}}
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          # draft: true
           prerelease: ${{ contains(github.ref_name, '-rc') }}
+          files: |
+            mruby/build/${{ matrix.name }}/bin/mruby-*
+            mruby/build/${{ matrix.name }}/bin/mrake
+          # draft: true
           # body_path: NEWS
-          files: mruby-${{matrix.name}}
-      - name: Release mrake
-        if: ${{ matrix.os == 'ubuntu-24.04' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          files: mruby/build/host/bin/mrake
