@@ -28,6 +28,7 @@ def setup(conf)
   conf.gem :github => 'mrbgems/mruby-yaml'
   conf.gem :github => 'ixday/mruby-polarssl'
   conf.gem :github => 'ixday/mrake'
+  conf.gem :github => 'matsumotory/mruby-simplehttp'
 
   conf.cc do |cc|
     # we want to optimize for size and speed
