@@ -30,11 +30,10 @@ def setup(conf)
   conf.gem :github => 'ixday/mrake'
   conf.gem :github => 'matsumotory/mruby-simplehttp'
 
-  conf.cc do |cc|
-    # we want to optimize for size and speed
-    # https://stackoverflow.com/questions/72030595/which-gcc-optimization-flags-affect-binary-size-the-most#answer-72037241
-    cc.flags << '-Os'
-  end
+  # https://stackoverflow.com/questions/72030595/which-gcc-optimization-flags-affect-binary-size-the-most#answer-72037241
+  conf.cc.flags << '-Os'
+  conf.cxx.flags << '-Os'
+  conf.linker.flags << '-s'
 
   # generate a binary using the passed name to ease release creation
   mruby = File.join build_dir, "bin", exefile("mruby")
