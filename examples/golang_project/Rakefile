@@ -1,11 +1,24 @@
 project = "hello"
 build_file = :"#{File.join %W[out #{project}]}"
 
+deps = %w[
+  github.com/a-h/templ/cmd/templ@latest
+]
+
 task default: [:build]
 
 desc "Run all unit tests"
 task :test => [:generate] do
   sh "go test ./..."
+end
+
+desc "Setup the environment"
+task :setup do
+  ask_validation 'GOPATH is not set, dependency will be installed in the default go location' if !ENV['GOPATH']
+  deps.each do |dep|
+    cmd = dep.split('@').first.split('/').last
+    sh "go install #{dep}" if !has? cmd
+  end
 end
 
 directory "out"
@@ -33,5 +46,19 @@ task :clean do
   Dir.glob("**/*_templ.go") do |entry|
     puts "rm #{entry}"
     File.delete(entry)
+  end
+end
+
+def ask_validation(msg)
+  puts 'WARN: '.yellow + msg + '. Proceed [y/n]?'
+  loop do
+    case (gets.chomp.downcase)
+    when 'y', 'ye', 'yes'
+     return
+    when 'n', 'no'
+     exit(1)
+    else
+     puts 'I didn\'t get your choice...'
+    end
   end
 end

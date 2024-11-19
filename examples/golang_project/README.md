@@ -6,7 +6,7 @@ This is a sample project to demonstrate the use of `mrake` in a Golang setup.
 
 You need the following tools installed
 - Golang
-- Templ: https://templ.guide/
+- Templ: https://templ.guide/ (you can run `mrake setup` to got it installed)
 - MRuby and MRake obviously
 
 ## How to
