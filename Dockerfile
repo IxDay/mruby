@@ -1,3 +1,7 @@
+FROM alpine:3.20 as compiler
+
+RUN apk add --no-cache build-base autoconf git zig ruby-rake automake libtool mingw-w64-gcc
+
 FROM ruby:3.2.2-bullseye
 
 RUN apt-get update && apt-get install --no-install-recommends -y python3-pip shellcheck \
