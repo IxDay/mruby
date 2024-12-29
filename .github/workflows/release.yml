@@ -42,8 +42,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ contains(github.ref_name, '-rc') }}
-          files: |
-            mruby/build/${{ matrix.name }}/bin/mruby-*
-            mruby/build/${{ matrix.name }}/bin/mrake
+          files: mruby/build/${{ matrix.name }}/mruby-*.zip
           # draft: true
           # body_path: NEWS

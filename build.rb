@@ -37,12 +37,13 @@ def setup(conf)
 
   # generate a binary using the passed name to ease release creation
   mruby = File.join build_dir, "bin", exefile("mruby")
-  product = File.join build_dir, "bin", exefile("mruby-#{name}")
+  mrake = File.join build_dir, "bin", "mrake" + (File.extname(mruby) == ".exe" ? ".bat" : "")
+  archive = File.join build_dir, "mruby-#{name}.zip"
 
-  file product => mruby do
-    FileUtils.cp(mruby, product)
+  file archive => [mruby, mrake] do |t|
+    `zip -j #{archive} #{mruby} #{mrake}`
   end
-  products << product # this adds the target rake task to current build targets
+  products << archive # this adds the target rake task to current build targets
 end
 
 def build(name)
