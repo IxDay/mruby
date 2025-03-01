@@ -23,12 +23,13 @@ def setup(conf)
   conf.gem :github => 'ixday/mruby-onig-regexp'
   conf.gem :github => 'appPlant/mruby-process'
 
-  conf.gem :github => 'mruby-Forum/mruby-ansi-colors'
-  conf.gem :github => 'mattn/mruby-json'
-  conf.gem :github => 'mrbgems/mruby-yaml'
-  conf.gem :github => 'sinisterchipmunk/mruby-polarssl'
-  conf.gem :github => 'ixday/mruby-rake'
-  conf.gem :github => 'matsumotory/mruby-simplehttp'
+  conf.gem :mgem => 'mruby-ansi-colors'
+  #conf.gem :github => 'mattn/mruby-json'
+  # conf.gem :github => 'mrbgems/mruby-yaml'
+  #conf.gem :github => 'sinisterchipmunk/mruby-polarssl'
+  #conf.gem :github => 'ixday/mruby-polarssl'
+  #conf.gem :github => 'ixday/mruby-rake'
+  #conf.gem :github => 'ixday/mruby-simplehttp'
 
   # https://stackoverflow.com/questions/72030595/which-gcc-optimization-flags-affect-binary-size-the-most#answer-72037241
   conf.cc.flags << '-Os'
@@ -37,11 +38,11 @@ def setup(conf)
 
   # generate a binary using the passed name to ease release creation
   mruby = File.join build_dir, "bin", exefile("mruby")
-  mrake = File.join build_dir, "bin", "mrake" + (File.extname(mruby) == ".exe" ? ".bat" : "")
+  #mrake = File.join build_dir, "bin", "mrake" + (File.extname(mruby) == ".exe" ? ".bat" : "")
   archive = File.join build_dir, "mruby-#{name}.zip"
 
-  file archive => [mruby, mrake] do |t|
-    `zip -j #{archive} #{mruby} #{mrake}`
+  file archive => [mruby] do |t|
+    `zip -j #{archive} #{mruby}`
   end
   products << archive # this adds the target rake task to current build targets
 end

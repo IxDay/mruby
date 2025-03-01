@@ -1,0 +1,67 @@
+---
+mruby:
+  version: 3.2.0
+  release_no: 30200
+  git_commit: 87260e7bb1a9edfb2ce9b41549c4142129061ca5
+builds:
+  linux-x86_64:
+    https://github.com/ixday/mruby-onig-regexp.git:
+      url: https://github.com/ixday/mruby-onig-regexp.git
+      branch: master
+      commit: 18ac6903761e461ecccadcfe417f1eacd6217dc2
+      version: 0.0.0
+    https://github.com/appPlant/mruby-process.git:
+      url: https://github.com/appPlant/mruby-process.git
+      branch: master
+      commit: 715014b1d9334ad6ff6fa3c55b87957ad1a6363a
+      version: 0.0.0
+    https://github.com/mruby-Forum/mruby-ansi-colors.git:
+      url: https://github.com/mruby-Forum/mruby-ansi-colors.git
+      branch: master
+      commit: 735bb2c7d51c55ff39e5a3e03423cf9f0550e41c
+      version: 1.2.0
+    https://github.com/mattn/mruby-json.git:
+      url: https://github.com/mattn/mruby-json.git
+      branch: master
+      commit: f99d9428025469f2400f93c53b185f65f963e507
+      version: 0.0.0
+    https://github.com/sinisterchipmunk/mruby-polarssl.git:
+      url: https://github.com/sinisterchipmunk/mruby-polarssl.git
+      branch: master
+      commit: bdd8b4908ddce8d35b6dc9b52c9b114f4ea27d3f
+      version: 2.1.2
+    https://github.com/ixday/mruby-rake.git:
+      url: https://github.com/ixday/mruby-rake.git
+      branch: master
+      commit: ab7c876c4fd64240854da61dfe7082f179722a82
+      version: 0.0.0
+    https://github.com/fastly/mruby-optparse.git:
+      url: https://github.com/fastly/mruby-optparse.git
+      branch: master
+      commit: e6397a090d1efe04d5dab57c63897f0d79bbad89
+      version: 0.0.0
+    https://github.com/ksss/mruby-file-stat.git:
+      url: https://github.com/ksss/mruby-file-stat.git
+      branch: master
+      commit: bb773da39517f3ae7232538c7e9c476d45f3d9b7
+      version: 0.0.0
+    https://github.com/gromnitsky/mruby-dir-glob.git:
+      url: https://github.com/gromnitsky/mruby-dir-glob.git
+      branch: master
+      commit: 334c040a2e2c4c2689f8c3440168011f64d57ada
+      version: 0.0.1
+    https://github.com/ixday/mruby-require.git:
+      url: https://github.com/ixday/mruby-require.git
+      branch: master
+      commit: 0667557cce1b23c395f30675bbc32a20ac1f1be0
+      version: 0.1.0
+    https://github.com/IceDragon200/mruby-catch-throw:
+      url: https://github.com/IceDragon200/mruby-catch-throw
+      branch: master
+      commit: 2b6eaff4232b4a9473b864df53c2917080af5dcf
+      version: 1.1.0
+    https://github.com/iij/mruby-env.git:
+      url: https://github.com/iij/mruby-env.git
+      branch: master
+      commit: 056ae324451ef16a50c7887e117f0ea30921b71b
+      version: 0.0.0
