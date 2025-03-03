@@ -1,11 +1,13 @@
 require_relative 'toolchain'
 
 ARCH_MAPPING = {
-  "windows-x86_64"    => "x86_64-windows-gnu",
-  "macos-x86_64"      => RUBY_PLATFORM,
-  # "macos-aarch64"     => RUBY_PLATFORM, # this is not working at the moment
-  "linux-x86_64"      => "x86_64-linux",
-  "linux-x86_64-musl" => "x86_64-linux-musl"
+  "windows-x86_64"     => "x86_64-windows-gnu",
+  "macos-x86_64"       => RUBY_PLATFORM,
+  # "macos-aarch64"      => RUBY_PLATFORM, # this is not working at the moment
+  "linux-x86_64"       => "x86_64-linux",
+  "linux-x86_64-musl"  => "x86_64-linux-musl",
+  "linux-aarch64"      => "aarch64-linux",
+  "linux-aarch64-musl" => "aarch64-linux-musl",
 }
 
 def setup(conf)
