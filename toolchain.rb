@@ -14,6 +14,7 @@ class MRuby::Toolchain::Zig
     "x86_64-linux"          => "x86_64-linux",
     "aarch64-linux"         => "aarch64-linux",
     "x86_64-linux-musl"     => "x86_64-linux-musl",
+    "aarch64-linux-musl"    => "aarch64-linux-musl",
     # those two are not working at the moment
     # "aarch64-macos"         => "aarch64-macos",
     # "x86_64-macos"          => "x86_64-macos",
