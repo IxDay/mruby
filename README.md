@@ -35,11 +35,6 @@ Find the latest binaries on the [Releases page][releases]. Each release includes
 ## License
 This project is released under the [MIT License][license], the same as the parent project, [mruby][mruby].
 
-## Roadmap
-
-- Better integration of PolarSSL to handle certificate generation
-
-
 [mrake]: https://github.com/IxDay/mrake
 [mruby]: https://github.com/mruby/mruby
 [build_config]: ./build.rb
